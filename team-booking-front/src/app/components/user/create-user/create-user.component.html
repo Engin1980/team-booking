@@ -1,19 +1,33 @@
-<h2>Register user</h2>
+<h2>Registrovat se</h2>
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-group">
-        <label for="email" class="form">Email</label>
-        <input id="name" name="name" type="email" formControlName="email" />
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" class="form-control" formControlName="email" />
+        <div *ngIf="form.get('email')?.invalid">
+            Email není ve správném formátu.
+        </div>
     </div>
     <div class="form-group">
-        <label for="password" class="form">Password</label>
-        <input id="password" name="password" type="password" formControlName="password" />
+        <label for="password">Heslo</label>
+        <input id="password" name="password" type="password" class="form-control" formControlName="password" />
+        <div *ngIf="form.get('password')?.invalid">
+            Heslo musí mít alespoň 8 znaků.
+        </div>
     </div>
     <div class="form-group">
-        <label for="passwordAgain" class="form">Password again</label>
-        <input id="passwordAgain" name="passwordAgain" type="password" formControlName="passwordAgain" />
+        <label for="passwordAgain">Password again</label>
+        <input id="passwordAgain" name="passwordAgain" type="password" class="form-control" formControlName="passwordAgain" />
     </div>
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Register</button>
+        <label for="nick">Nick</label>
+        <input id="nick" name="nick" type="text" class="form-control" formControlName="nick" />
+        <div *ngIf="form.get('nick')?.invalid">
+            Přezdívka nesmí být prázdná.
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Zaregistrovat se</button>
+        <a [routerLink]="['user','login']" class="ml-5">Přihlásit se</a>
     </div>
 </form>

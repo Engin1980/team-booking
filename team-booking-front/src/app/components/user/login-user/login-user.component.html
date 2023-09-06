@@ -1,0 +1,22 @@
+<h2>Přihlásit se</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" class="form-control" formControlName="email" />
+        <div *ngIf="form.get('email')?.invalid">
+            Vyžadována platná e-mailová adresa.
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password">Heslo</label>
+        <input id="password" name="password" type="password" class="form-control" formControlName="password" />
+        <div *ngIf="form.get('password')?.invalid">
+            Vyžadováno platné heslo.
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Přihlásit se</button>
+        <a [routerLink]="['/user', 'create']" class="ml-5">Zaregistrovat se</a>
+    </div>
+</form>

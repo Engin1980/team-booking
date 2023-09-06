@@ -1,4 +1,14 @@
 <h1>Team Booking</h1>
 <hr style="width: 90%;" />
+<div class="div-user">
+    <div *ngIf="loggedUser">
+        ?? / ??
+    </div>
+    <div *ngIf="!loggedUser">
+        <a [routerLink]="['/user', 'login']">Přihlásit uživatele</a>
+    </div>
+</div>
+<hr style="width: 90%;" />
+
 
 <router-outlet></router-outlet>

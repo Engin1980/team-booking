@@ -3,7 +3,7 @@ export const environment = {
     firebase: {
       apiKey: 'AIzaSyCNQv4-ACnRovEdy_0YQwfy8dZwcY8TBpA',
       authDomain: 'team-booking-31573.firebaseapp.com',
-      // databaseURL: 'https://bezkoder-firebase.firebaseio.com',
+      databaseURL: 'https://team-booking-31573-default-rtdb.europe-west1.firebasedatabase.app/',
       projectId: 'team-booking-31573',
       storageBucket: 'team-booking-31573.appspot.com',
       messagingSenderId: '324227173749',
