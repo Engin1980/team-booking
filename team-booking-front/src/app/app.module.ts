@@ -12,12 +12,16 @@ import { CreateUserComponent } from './components/user/create-user/create-user.c
 import { IUserService } from './services/model-related/iuser.service';
 import { FireUserService } from './services/backend-related/fire/fire-user.service';
 import { LoginUserComponent } from './components/user/login-user/login-user.component';
+import { InfoUserComponent } from './components/user/info-user/info-user.component';
+import { TeamsUserComponent } from './components/user/teams-user/teams-user.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateUserComponent,
-    LoginUserComponent
+    LoginUserComponent,
+    InfoUserComponent,
+    TeamsUserComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { throwUnexpectedException } from 'src/app/classes/UnexpectedException';
 import { IUserService } from 'src/app/services/model-related/iuser.service';
 
@@ -17,14 +18,15 @@ export class LoginUserComponent {
       Validators.minLength(8), Validators.required]))
   });
 
-  constructor(private userService: IUserService) { }
+  constructor(
+    private userService: IUserService,
+    private router : Router) { }
 
   onSubmit(): void {
-    console.log("submited");
     const email: string = this.form.get("email")?.value ?? throwUnexpectedException();
     const password: string = this.form.get("password")?.value ?? throwUnexpectedException();
 
     this.userService.login(email, password)
-      .subscribe(loggedUser => console.log("Logged in as " + JSON.stringify(loggedUser)));
+      .subscribe(loggedUser => this.router.navigate(["user", loggedUser.id, "teams"]));
   }
 }

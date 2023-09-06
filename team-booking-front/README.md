@@ -5,3 +5,4 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 # Instalace
 
 npm install @angular/fire
+npm install firebase@10.3.1 --save

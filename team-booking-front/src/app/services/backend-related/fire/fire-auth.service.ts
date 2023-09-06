@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { User } from 'src/app/model/model';
 import { initializeApp, FirebaseApp } from "firebase/app";
-import { getAuth, Auth, UserCredential, createUserWithEmailAndPassword } from 'firebase/auth';
-import { from, Observable, tap, map, of } from 'rxjs';
+import { getAuth, Auth, UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { from, Observable, tap, map, of, concatMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ToDoException } from 'src/app/classes/ToDoException';
 
@@ -13,24 +13,25 @@ export class FireAuthService {
 
   private readonly app = initializeApp(environment.firebase);
   private readonly auth = getAuth();
-  private loggedUser: User | null = null;
 
   public register(user: User): Observable<void> {
-    const prom$ = createUserWithEmailAndPassword(this.auth, user.email, user.password)
-    const obs$ = from(prom$);
-    const ret$ = obs$.pipe(
-      tap(userCredential => this.loggedUser = null),
+    const prom = createUserWithEmailAndPassword(this.auth, user.email, user.password)
+    const obs = from(prom);
+    const ret = obs.pipe(
       map(_ => void 0)
     );
-    return ret$;
+    return ret;
   }
-
-  public getLoggedUser(): User | null { return this.loggedUser; }
 
   public login(email: string, password: string): Observable<UserCredential> {
-    throw new ToDoException();
+    const prom = signInWithEmailAndPassword(this.auth, email, password);
+    const ret = from(prom);
+    return ret;
   }
+
   public logout(): Observable<void> {
-    throw new ToDoException();
+    const prom = signOut(this.auth);
+    const ret = from(prom);
+    return ret;
   }
 }

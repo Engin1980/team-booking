@@ -1,5 +1,5 @@
 export interface ID{
-    id : number;
+    id : any;
 }
 
 export interface Team extends ID{
