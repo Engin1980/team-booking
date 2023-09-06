@@ -65,12 +65,4 @@ export class FireUserService extends FireRepoService<User> implements IUserServi
     );
     return ret;
   }
-
-  public delete(item: ID): Observable<void> {
-    throw new ToDoException();
-  }
-
-  public getAll(): Observable<User[]> {
-    throw new ToDoException();
-  }
 }

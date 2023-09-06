@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, updateDoc, getDoc, doc, Firestore } from '@firebase/firestore';
-import { Observable, of, from, map, concatMap } from 'rxjs';
+import { getFirestore, collection, addDoc, updateDoc, getDoc, doc, Firestore, deleteDoc } from '@firebase/firestore';
+import { Observable, of, from, map, concatMap, tap } from 'rxjs';
 import { getDatabase, ref, set, get, child, DatabaseReference } from "firebase/database";
 import { ID, User } from 'src/app/model/model';
+import { ToDoException } from 'src/app/classes/ToDoException';
 
 export class FireRepoService<T extends ID> {
 
   private MINIMAL_VALID_ID = 1;
-  private readonly key : string;
-  constructor(key: string) { 
+  private readonly key: string;
+  constructor(key: string) {
     this.key = key;
   }
 
@@ -22,7 +23,7 @@ export class FireRepoService<T extends ID> {
       );
   }
 
-  protected getDb(): Firestore{
+  protected getDb(): Firestore {
     return getFirestore();
   }
 
@@ -30,7 +31,8 @@ export class FireRepoService<T extends ID> {
     const db = getFirestore();
     const docRef = addDoc(collection(db, this.key), item);
     const ret = from(docRef).pipe(
-      concatMap(doc => of({id: doc.id}))
+      tap(doc => item.id = doc.id),
+      concatMap(doc => of({ id: doc.id }))
     );
     return ret;
   }
@@ -53,12 +55,15 @@ export class FireRepoService<T extends ID> {
     );
     return ret;
   }
-}
 
-class XA{
-  public a:number = 8;
-}
+  public delete(item: ID): Observable<void> {
+    const db = getFirestore();
+    const tmp = deleteDoc(doc(db, this.key, item.id));
+    const ret = from(tmp);
+    return ret;
+  }
 
-interface XB extends XA{
-  b:number
+  public getAll(): Observable<T[]> {
+    throw new ToDoException();
+  }
 }
