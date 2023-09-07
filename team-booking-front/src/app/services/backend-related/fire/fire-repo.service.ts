@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, updateDoc, getDoc, doc, Firestore, deleteDoc } from '@firebase/firestore';
+import { getFirestore, collection, addDoc, updateDoc, getDoc, getDocs, doc, Firestore, deleteDoc, onSnapshot, QuerySnapshot, Unsubscribe } from '@firebase/firestore';
 import { Observable, of, from, map, concatMap, tap } from 'rxjs';
-import { getDatabase, ref, set, get, child, DatabaseReference } from "firebase/database";
+// import { getDatabase, ref, set, get, child, DatabaseReference } from "firebase/database";
 import { ID, User } from 'src/app/model/model';
 import { ToDoException } from 'src/app/classes/ToDoException';
+import { DocumentData } from '@angular/fire/compat/firestore';
 
+type ItemConsumer<T> = (item : T, operation:string) => void;
 export class FireRepoService<T extends ID> {
 
   private MINIMAL_VALID_ID = 1;
@@ -48,10 +50,15 @@ export class FireRepoService<T extends ID> {
 
   public getById(id: any): Observable<T> {
     const inKey = this.key + "/" + id;
-    const db = getDatabase();
-    let dbRef = child(ref(db), inKey);
-    const ret = from(get(dbRef)).pipe(
-      map(snapshot => snapshot.val as unknown as T)
+    const db = getFirestore();
+    const docRef = doc(db, this.key, id);
+    const docDataRef = getDoc(docRef);
+    const ret = from(docDataRef).pipe(
+      map(d=>{
+        const ret = d.data() as T;
+        ret.id = d.id;
+        return ret;
+      })
     );
     return ret;
   }
@@ -64,6 +71,38 @@ export class FireRepoService<T extends ID> {
   }
 
   public getAll(): Observable<T[]> {
-    throw new ToDoException();
+    const db = getFirestore();
+    const colRef = collection(db, this.key);
+    const prom = getDocs(colRef);
+    const ret = from(prom).pipe(
+      map(q => {
+        const ret : T[] = [];
+        q.forEach(x => {
+          const it = x.data() as T;
+          it.id = x.id;
+          ret.push(it);
+        });
+        return ret;
+      })
+    );
+    return ret;
+  }
+
+  public getAllSnapshot(consumer: ItemConsumer<T>) : Unsubscribe{
+    const db = getFirestore();
+    const colRef = collection(db, this.key);
+    const unsubscribe = onSnapshot(colRef, qs => {
+      qs.forEach(q => {
+        const item = q.data() as unknown as T;
+        item.id = q.id;
+        consumer(item, "new");
+      });
+      qs.docChanges().forEach(q => {
+        const item = q.doc.data() as unknown as T;
+        item.id = q.doc.id;
+        consumer(item, q.type);
+      })
+    });
+    return unsubscribe;
   }
 }

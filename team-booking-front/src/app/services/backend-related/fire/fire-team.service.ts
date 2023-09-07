@@ -5,6 +5,7 @@ import { ITeamService } from '../../model-related/iteam.service';
 import { Observable } from 'rxjs';
 import { FireUserTeamService } from './fire-userteam.service';
 import { ToDoException } from 'src/app/classes/ToDoException';
+import { doc, onSnapshot } from "firebase/firestore";
 
 const KEY = "teams";
 @Injectable({
@@ -20,7 +21,12 @@ export class FireTeamService extends FireRepoService<Team> implements ITeamServi
     const ut = ModelFactory.createUserTeam(user, team, isAdmin);
     return this.userTeamService.create(ut);
   }
+
   public removeUser(team: ID, user: ID): Observable<void> {
+    throw new ToDoException();
+  }
+
+  public getAllByUser(user: ID): Observable<Team> {
     throw new ToDoException();
   }
 }

@@ -1,9 +1,16 @@
 export class UnexpectedException extends Error {
-    constructor() {
-        super("Unexpected application state.");
+    constructor(message?: string) {
+        super(UnexpectedException.convertMessageToString(message));
+    }
+
+    private static convertMessageToString(message?: string | null): string {
+        if (message == undefined)
+            return "Unexpected application state.";
+        else
+            return "Unexpected application state: " + message;
     }
 }
 
-export function throwUnexpectedException(): never {
-    throw new UnexpectedException();
+export function throwUnexpectedException(message? : string): never {
+    throw new UnexpectedException(message);
 }

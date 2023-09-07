@@ -14,7 +14,7 @@ import { FireUserService } from './services/backend-related/fire/fire-user.servi
 import { LoginUserComponent } from './components/user/login-user/login-user.component';
 import { InfoUserComponent } from './components/user/info-user/info-user.component';
 import { TeamsUserComponent } from './components/user/teams-user/teams-user.component';
-import { IteamService } from './services/model-related/iteam.service';
+import { ITeamService } from './services/model-related/iteam.service';
 import { FireTeamService } from './services/backend-related/fire/fire-team.service';
 
 @NgModule({
@@ -34,7 +34,7 @@ import { FireTeamService } from './services/backend-related/fire/fire-team.servi
   ],
   providers: [
     { provide: IUserService, useClass: FireUserService },
-    { provide: IteamService, useClass: FireTeamService }
+    { provide: ITeamService, useClass: FireTeamService }
   ],
   bootstrap: [AppComponent]
 })

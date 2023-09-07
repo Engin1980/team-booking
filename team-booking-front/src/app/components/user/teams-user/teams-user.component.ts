@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { throwUnexpectedException } from 'src/app/classes/UnexpectedException';
-import { ModelFactory } from 'src/app/model/model';
+import { ModelFactory, Team } from 'src/app/model/model';
 import { ITeamService } from 'src/app/services/model-related/iteam.service';
 import { IUserService } from 'src/app/services/model-related/iuser.service';
 import { concatMap } from 'rxjs';
@@ -12,19 +12,33 @@ import { concatMap } from 'rxjs';
   styleUrls: ['./teams-user.component.css']
 })
 export class TeamsUserComponent {
-  form = new FormGroup({
+  protected form = new FormGroup({
     title: new FormControl('', Validators.required)
   });
+  protected teams: Team[] = [];
 
   constructor(
     private teamService: ITeamService,
     private userService: IUserService
   ) { }
 
+  ngOnInit() {
+    console.log("init");
+    this.teams.push(ModelFactory.createTeam("Bublinky"));
+    this.teams.push(ModelFactory.createTeam("Žužlinky"));
+
+    console.log("onot");
+    // const loggedUser = this.userService.getLoggedUser() ?? throwUnexpectedException("No logged user");
+    // this.teamService.getAllByUser(loggedUser);
+    this.teamService.getAll().subscribe(q => this.teams = q);
+    console.log("unut");
+
+  }
+
   onSubmit() {
-    const title = this.form.get("title")?.value ?? throwUnexpectedException();
+    const title = this.form.get("title")?.value ?? throwUnexpectedException("title is null");
     const team = ModelFactory.createTeam(title);
-    const user = this.userService.getLoggedUser() ?? throwUnexpectedException();
+    const user = this.userService.getLoggedUser() ?? throwUnexpectedException("logged-user is null");
 
     this.teamService.create(team).pipe(
       concatMap(id => this.teamService.assignUser(team, user, true))

@@ -1,34 +1,10 @@
 <h2>Moje týmy</h2>
 
 <div class="row">
-    <div class="col-sm-4 mt-3">
+    <div *ngFor="let team of teams" class="col-sm-4 mt-3">
         <div class="card text-center">
             <div class="card-body">
-                <h5 class="card-title">Florbal středa</h5>
-                <a href="#" class="btn btn-primary">Zobrazit detail</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-4 mt-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <a href="#" class="btn btn-primary">Zobrazit detail</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-4 mt-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <a href="#" class="btn btn-primary">Zobrazit detail</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-4 mt-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
+                <h5 class="card-title">{{team.title}}</h5>
                 <a href="#" class="btn btn-primary">Zobrazit detail</a>
             </div>
         </div>
