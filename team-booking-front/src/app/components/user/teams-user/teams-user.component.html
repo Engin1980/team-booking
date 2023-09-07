@@ -1,6 +1,9 @@
 <h2>Moje týmy</h2>
 
 <div class="row">
+    <div *ngIf="teams.length == 0">
+        Zatím zde nejsou žádné týmy...
+    </div>
     <div *ngFor="let team of teams" class="col-sm-4 mt-3">
         <div class="card text-center">
             <div class="card-body">

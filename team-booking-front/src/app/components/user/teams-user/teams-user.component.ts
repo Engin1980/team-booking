@@ -23,15 +23,14 @@ export class TeamsUserComponent {
   ) { }
 
   ngOnInit() {
-    console.log("init");
-    this.teams.push(ModelFactory.createTeam("Bublinky"));
-    this.teams.push(ModelFactory.createTeam("Žužlinky"));
-
-    console.log("onot");
     // const loggedUser = this.userService.getLoggedUser() ?? throwUnexpectedException("No logged user");
     // this.teamService.getAllByUser(loggedUser);
-    this.teamService.getAll().subscribe(q => this.teams = q);
-    console.log("unut");
+    // this.teamService.getAll().subscribe(q => this.teams = q);
+    this.teamService.getAllSnapshot((t, d) => {
+      if (d === "added") {
+        this.teams.push(t);
+      }
+    });
 
   }
 
