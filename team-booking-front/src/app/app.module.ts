@@ -8,22 +8,23 @@ import { AppComponent } from './app.component';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from '../environments/environment';
-import { CreateUserComponent } from './components/user/create-user/create-user.component';
+import { CreateUserComponent } from './components/user/user-create/user-create.component';
 import { IUserService } from './services/model-related/iuser.service';
 import { FireUserService } from './services/backend-related/fire/fire-user.service';
-import { LoginUserComponent } from './components/user/login-user/login-user.component';
-import { InfoUserComponent } from './components/user/info-user/info-user.component';
-import { TeamsUserComponent } from './components/user/teams-user/teams-user.component';
+import { LoginUserComponent } from './components/user/user-login/user-login.component';
+import { TeamsUserComponent } from './components/user/user-teams/user-teams.component';
 import { ITeamService } from './services/model-related/iteam.service';
 import { FireTeamService } from './services/backend-related/fire/fire-team.service';
+import { UserInfoComponent } from './components/user/user-info/user-info.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreateUserComponent,
     LoginUserComponent,
-    InfoUserComponent,
-    TeamsUserComponent
+    UserInfoComponent,
+    TeamsUserComponent,
+    UserInfoComponent
   ],
   imports: [
     BrowserModule,

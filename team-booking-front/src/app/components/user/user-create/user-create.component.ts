@@ -6,9 +6,9 @@ import { IUserService } from 'src/app/services/model-related/iuser.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-create-user',
-  templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.css']
+  selector: 'app-user-create',
+  templateUrl: './user-create.component.html',
+  styleUrls: ['./user-create.component.css']
 })
 export class CreateUserComponent {
   form = new FormGroup({

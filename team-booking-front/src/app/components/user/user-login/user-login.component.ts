@@ -7,9 +7,9 @@ import { IUserService } from 'src/app/services/model-related/iuser.service';
 
 
 @Component({
-  selector: 'app-login-user',
-  templateUrl: './login-user.component.html',
-  styleUrls: ['./login-user.component.css']
+  selector: 'app-user-login',
+  templateUrl: './user-login.component.html',
+  styleUrls: ['./user-login.component.css']
 })
 export class LoginUserComponent {
   form = new FormGroup({

@@ -7,9 +7,9 @@ import { IUserService } from 'src/app/services/model-related/iuser.service';
 import { concatMap } from 'rxjs';
 
 @Component({
-  selector: 'app-teams-user',
-  templateUrl: './teams-user.component.html',
-  styleUrls: ['./teams-user.component.css']
+  selector: 'app-user-teams',
+  templateUrl: './user-teams.component.html',
+  styleUrls: ['./user-teams.component.css']
 })
 export class TeamsUserComponent {
   protected form = new FormGroup({
