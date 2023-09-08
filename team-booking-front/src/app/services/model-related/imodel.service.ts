@@ -7,7 +7,8 @@ export abstract class IModelService<T extends ID>{
     public abstract create(item: T): Observable<ID>
     public abstract update(item: T): Observable<void>
     public abstract delete(item: ID): Observable<void>
-    public abstract getAll(): Observable<T[]>
     public abstract getById(id: ID): Observable<T>
-    public abstract getAllSnapshot(consumer: ItemConsumer<T>): Unsubscribe
+    public abstract getList(): Observable<T[]>
+    public abstract getAll(): Observable<T>
+    public abstract getAllLive(consumer: ItemConsumer<T>): Unsubscribe
 }

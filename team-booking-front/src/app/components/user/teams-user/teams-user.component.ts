@@ -26,11 +26,17 @@ export class TeamsUserComponent {
     // const loggedUser = this.userService.getLoggedUser() ?? throwUnexpectedException("No logged user");
     // this.teamService.getAllByUser(loggedUser);
     // this.teamService.getAll().subscribe(q => this.teams = q);
-    this.teamService.getAllSnapshot((t, d) => {
-      if (d === "added") {
-        this.teams.push(t);
-      }
-    });
+    // this.teamService.getAllSnapshot((t, d) => {
+    //   if (d === "added") {
+    //     this.teams.push(t);
+    //   }
+    // });
+
+    const loggedUser = this.userService.getLoggedUser() ?? throwUnexpectedException("No logged user");
+    console.log("dud");
+    //    this.teamService.getListByUser(loggedUser).subscribe(q=> this.teams = q);
+    this.teamService.getAllByUser(loggedUser).subscribe(q => this.teams.push(q));
+    console.log("dod");
 
   }
 

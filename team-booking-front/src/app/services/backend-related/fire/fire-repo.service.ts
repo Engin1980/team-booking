@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, updateDoc, getDoc, getDocs, doc, Firestore, deleteDoc, onSnapshot, QuerySnapshot, Unsubscribe } from '@firebase/firestore';
+import { getFirestore, collection, addDoc, updateDoc, getDoc, getDocs, doc, Firestore, deleteDoc, onSnapshot, query, Unsubscribe, QueryConstraint } from '@firebase/firestore';
 import { Observable, of, from, map, concatMap, tap } from 'rxjs';
 // import { getDatabase, ref, set, get, child, DatabaseReference } from "firebase/database";
 import { ID, User } from 'src/app/model/model';
@@ -70,7 +70,7 @@ export class FireRepoService<T extends ID> {
     return ret;
   }
 
-  public getAll(): Observable<T[]> {
+  public getList(): Observable<T[]> {
     const db = getFirestore();
     const colRef = collection(db, this.key);
     const prom = getDocs(colRef);
@@ -88,7 +88,63 @@ export class FireRepoService<T extends ID> {
     return ret;
   }
 
-  public getAllSnapshot(consumer: ItemConsumer<T>) : Unsubscribe{
+  public getAll() : Observable<T>{
+    const db = getFirestore();
+    const colRef = collection(db, this.key);
+    const prom = getDocs(colRef);
+    const ret = from(prom).pipe(
+      concatMap(q => {
+        const ret : T[] = [];
+        q.forEach(x => {
+          const it = x.data() as T;
+          it.id = x.id;
+          ret.push(it);
+        });
+        return ret;
+      })
+    );
+    return ret;
+  }
+
+  protected getListByQuery(queryConstraint : QueryConstraint) : Observable<T[]>{
+    const db = getFirestore();
+    const colRef = collection(db, this.key);
+    const queryRef = query(colRef, queryConstraint);
+    const resRef = getDocs(queryRef);
+    const ret = from(resRef).pipe(
+      map(q => {
+        const utret: T[] = [];
+        q.forEach(it => {
+          const ut: T = it.data() as T;
+          ut.id = it.id;
+          utret.push(ut);
+        });
+        return utret;
+      })
+    );
+    return ret;
+  }
+
+  protected getAllByQuery(queryConstraint : QueryConstraint) : Observable<T>{
+    const db = getFirestore();
+    const colRef = collection(db, this.key);
+    const queryRef = query(colRef, queryConstraint);
+    const resRef = getDocs(queryRef);
+    const ret = from(resRef).pipe(
+      concatMap(q => {
+        const utret: T[] = [];
+        q.forEach(it => {
+          const ut: T = it.data() as T;
+          ut.id = it.id;
+          utret.push(ut);
+        });
+        return utret;
+      })
+    );
+    return ret;
+  }
+
+  public getAllLive(consumer: ItemConsumer<T>) : Unsubscribe{
     const db = getFirestore();
     const colRef = collection(db, this.key);
     const unsubscribe = onSnapshot(colRef, qs => {
