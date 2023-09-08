@@ -37,14 +37,22 @@ export interface Comment extends ID {
 }
 
 export class ModelFactory {
+
+    static createId(id: any): ID {
+        const ret: ID = {
+            id: id
+        };
+        return ret;
+    }
+
     static createUserTeam(user: ID, team: ID, isUserAdmin: boolean) {
-      const ret : UserTeam = {
-         id : 0,
-         userId : user.id,
-         teamid : team.id,
-         isAdmin : isUserAdmin
-      };
-      return ret;
+        const ret: UserTeam = {
+            id: 0,
+            userId: user.id,
+            teamid: team.id,
+            isAdmin: isUserAdmin
+        };
+        return ret;
     }
     static createTeam(title: string) {
         const ret: Team = {
@@ -53,7 +61,7 @@ export class ModelFactory {
         };
         return ret;
     }
-    
+
     public static createUser(email: string, password: string, nick: string): User {
         const ret: User = {
             id: 0,

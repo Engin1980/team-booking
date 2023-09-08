@@ -4,14 +4,18 @@ import { CreateUserComponent } from './components/user/user-create/user-create.c
 import { LoginUserComponent } from './components/user/user-login/user-login.component';
 import { TeamsUserComponent } from './components/user/user-teams/user-teams.component';
 import { UserInfoComponent } from './components/user/user-info/user-info.component';
+import { TeamInfoComponent } from './components/team/team-info/team-info.component';
 
 const routes: Routes = [
-  {path: "user/create", component: CreateUserComponent},
-  {path: "user/login", component: LoginUserComponent},
-  {path: "user/:id", children: [
-    {path:'info', component: UserInfoComponent},
-    {path:"teams", component:TeamsUserComponent}
-  ]}
+  { path: "user/create", component: CreateUserComponent },
+  { path: "user/login", component: LoginUserComponent },
+  {
+    path: "user/:id", children: [
+      { path: 'info', component: UserInfoComponent },
+      { path: "teams", component: TeamsUserComponent }
+    ]
+  },
+  { path: "team/:id", component: TeamInfoComponent }
 ];
 
 @NgModule({

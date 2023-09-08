@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { FireRepoService } from './fire-repo.service';
-import { ID, ModelFactory, Team } from 'src/app/model/model';
+import { ID, ModelFactory, Team, User } from 'src/app/model/model';
 import { ITeamService } from '../../model-related/iteam.service';
 import { Observable, concatMap, map } from 'rxjs';
 import { FireUserTeamService } from './fire-userteam.service';
 import { ToDoException } from 'src/app/classes/ToDoException';
 import { collection, doc, onSnapshot } from "firebase/firestore";
+import { IUserService } from '../../model-related/iuser.service';
 
 const KEY = "teams";
 @Injectable({
@@ -14,15 +15,16 @@ const KEY = "teams";
 export class FireTeamService extends FireRepoService<Team> implements ITeamService {
 
   constructor(
-    private userTeamService: FireUserTeamService
+    private userTeamService: FireUserTeamService,
+    private userService: IUserService
   ) { super(KEY); }
 
-  public assignUser(team: ID, user: ID, isAdmin: boolean): Observable<ID> {
+  public assignMember(team: ID, user: ID, isAdmin: boolean): Observable<ID> {
     const ut = ModelFactory.createUserTeam(user, team, isAdmin);
     return this.userTeamService.create(ut);
   }
 
-  public removeUser(team: ID, user: ID): Observable<void> {
+  public removeMember(team: ID, user: ID): Observable<void> {
     throw new ToDoException();
   }
 
@@ -33,7 +35,7 @@ export class FireTeamService extends FireRepoService<Team> implements ITeamServi
       map(uts => {
         const teamRet: Team[] = [];
         for (let ut of uts) {
-          const t = this.getById(ut.teamid).subscribe(q => teamRet.push(q));
+          const t = this.getById(ModelFactory.createId(ut.teamid)).subscribe(q => teamRet.push(q));
         }
         return teamRet;
       })
@@ -45,8 +47,23 @@ export class FireTeamService extends FireRepoService<Team> implements ITeamServi
     const db = super.getDb();
     const ut_ = this.userTeamService.getAllByUserId(user);
     const ret = ut_.pipe(
-      concatMap(ut => this.getById(ut.teamid))
+      concatMap(ut => this.getById(ModelFactory.createId(ut.teamid)))
     );
     return ret;
+  }
+
+  public getAllMembers(team: ID): Observable<User> {
+    const db = super.getDb();
+    const ut_ = this.userTeamService.getAllByTeamId(team);
+    const ret = ut_.pipe(
+      concatMap(q => this.userService.getById(ModelFactory.createId(q.userId)))
+    );
+    return ret;
+  }
+
+  public isMemberAdmin(team: ID, user: ID): Observable<boolean> {
+    const db = super.getDb();
+    const ut_ = this.userTeamService.getByTeamAndUserId(team, user);
+
   }
 }

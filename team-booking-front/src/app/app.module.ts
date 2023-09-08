@@ -16,6 +16,7 @@ import { TeamsUserComponent } from './components/user/user-teams/user-teams.comp
 import { ITeamService } from './services/model-related/iteam.service';
 import { FireTeamService } from './services/backend-related/fire/fire-team.service';
 import { UserInfoComponent } from './components/user/user-info/user-info.component';
+import { TeamInfoComponent } from './components/team/team-info/team-info.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { UserInfoComponent } from './components/user/user-info/user-info.compone
     LoginUserComponent,
     UserInfoComponent,
     TeamsUserComponent,
-    UserInfoComponent
+    UserInfoComponent,
+    TeamInfoComponent
   ],
   imports: [
     BrowserModule,

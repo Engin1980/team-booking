@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, updateDoc, getDoc, getDocs, doc, Firestore, deleteDoc, onSnapshot, query, Unsubscribe, QueryConstraint } from '@firebase/firestore';
+import { getFirestore, collection, addDoc, updateDoc, getDoc, getDocs, doc, Firestore, Query,
+  deleteDoc, onSnapshot, query, Unsubscribe, QueryConstraint, QueryCompositeFilterConstraint } from '@firebase/firestore';
 import { Observable, of, from, map, concatMap, tap } from 'rxjs';
 // import { getDatabase, ref, set, get, child, DatabaseReference } from "firebase/database";
 import { ID, User } from 'src/app/model/model';
@@ -48,10 +49,11 @@ export class FireRepoService<T extends ID> {
     return ret;
   }
 
-  public getById(id: any): Observable<T> {
+  public getById(id: ID): Observable<T> {
+    console.log("getting " + this.key + " with id " + id.id);
     const inKey = this.key + "/" + id;
     const db = getFirestore();
-    const docRef = doc(db, this.key, id);
+    const docRef = doc(db, this.key, id.id);
     const docDataRef = getDoc(docRef);
     const ret = from(docDataRef).pipe(
       map(d=>{
@@ -125,10 +127,14 @@ export class FireRepoService<T extends ID> {
     return ret;
   }
 
-  protected getAllByQuery(queryConstraint : QueryConstraint) : Observable<T>{
+  protected getAllByQuery(queryConstraint : QueryConstraint| QueryCompositeFilterConstraint) : Observable<T>{
     const db = getFirestore();
     const colRef = collection(db, this.key);
-    const queryRef = query(colRef, queryConstraint);
+    let queryRef : Query;
+    if (queryConstraint instanceof QueryConstraint)
+      queryRef = query(colRef, queryConstraint);
+    else
+      queryRef = query(colRef, queryConstraint as QueryCompositeFilterConstraint);
     const resRef = getDocs(queryRef);
     const ret = from(resRef).pipe(
       concatMap(q => {

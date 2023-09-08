@@ -46,7 +46,7 @@ export class TeamsUserComponent {
     const user = this.userService.getLoggedUser() ?? throwUnexpectedException("logged-user is null");
 
     this.teamService.create(team).pipe(
-      concatMap(id => this.teamService.assignUser(team, user, true))
+      concatMap(id => this.teamService.assignMember(team, user, true))
     ).subscribe(
       _ => console.log("created")
     );
