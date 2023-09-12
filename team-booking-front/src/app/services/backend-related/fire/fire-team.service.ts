@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FireRepoService } from './fire-repo.service';
 import { ID, ModelFactory, Team, User } from 'src/app/model/model';
 import { ITeamService } from '../../model-related/iteam.service';
-import { Observable, concatMap, map } from 'rxjs';
+import { Observable, concatMap, map, tap } from 'rxjs';
 import { FireUserTeamService } from './fire-userteam.service';
 import { ToDoException } from 'src/app/classes/ToDoException';
 import { collection, doc, onSnapshot } from "firebase/firestore";
@@ -35,7 +35,7 @@ export class FireTeamService extends FireRepoService<Team> implements ITeamServi
       map(uts => {
         const teamRet: Team[] = [];
         for (let ut of uts) {
-          const t = this.getById(ModelFactory.createId(ut.teamid)).subscribe(q => teamRet.push(q));
+          const t = this.getById(ModelFactory.createId(ut.teamId)).subscribe(q => teamRet.push(q));
         }
         return teamRet;
       })
@@ -47,15 +47,17 @@ export class FireTeamService extends FireRepoService<Team> implements ITeamServi
     const db = super.getDb();
     const ut_ = this.userTeamService.getAllByUserId(user);
     const ret = ut_.pipe(
-      concatMap(ut => this.getById(ModelFactory.createId(ut.teamid)))
+      concatMap(ut => this.getById(ModelFactory.createId(ut.teamId)))
     );
     return ret;
   }
 
   public getAllMembers(team: ID): Observable<User> {
+    console.log("getting all members")
     const db = super.getDb();
     const ut_ = this.userTeamService.getAllByTeamId(team);
     const ret = ut_.pipe(
+      tap(m => console.log("got member " + JSON.stringify(m))),
       concatMap(q => this.userService.getById(ModelFactory.createId(q.userId)))
     );
     return ret;
@@ -63,7 +65,10 @@ export class FireTeamService extends FireRepoService<Team> implements ITeamServi
 
   public isMemberAdmin(team: ID, user: ID): Observable<boolean> {
     const db = super.getDb();
-    const ut_ = this.userTeamService.getByTeamAndUserId(team, user);
-
+    const ut_ = this.userTeamService.getByTeamIdAndUserId(team, user);
+    const ret = ut_.pipe(
+      map(res => (res != undefined) ? res.isAdmin : false)
+    );
+    return ret;
   }
 }

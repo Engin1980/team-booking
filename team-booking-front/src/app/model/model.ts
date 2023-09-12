@@ -15,7 +15,7 @@ export interface User extends ID {
 
 export interface UserTeam extends ID {
     userId: number;
-    teamid: number;
+    teamId: number;
     isAdmin: boolean;
 }
 
@@ -49,7 +49,7 @@ export class ModelFactory {
         const ret: UserTeam = {
             id: 0,
             userId: user.id,
-            teamid: team.id,
+            teamId: team.id,
             isAdmin: isUserAdmin
         };
         return ret;

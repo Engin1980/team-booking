@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, updateDoc, getDoc, getDocs, doc, Firestore, Query,
   deleteDoc, onSnapshot, query, Unsubscribe, QueryConstraint, QueryCompositeFilterConstraint } from '@firebase/firestore';
-import { Observable, of, from, map, concatMap, tap } from 'rxjs';
+import { Observable, of, from, map, concatMap, tap, concat, concatAll, reduce, zip } from 'rxjs';
 // import { getDatabase, ref, set, get, child, DatabaseReference } from "firebase/database";
 import { ID, User } from 'src/app/model/model';
 import { ToDoException } from 'src/app/classes/ToDoException';
@@ -72,6 +72,20 @@ export class FireRepoService<T extends ID> {
     return ret;
   }
 
+  public deleteMany(items:ID[]):Observable<void>{    
+    const db = getFirestore();
+    const observables : Observable<void>[] = [];
+    for (let item of items){
+      const tmp = deleteDoc(doc(db, this.key, item.id));
+      const ret = from(tmp);
+      observables.push(ret);
+    }
+    const ret : Observable<void> = zip(observables).pipe(
+      map(_ => void 0)
+    );
+    return ret;
+  }
+
   public getList(): Observable<T[]> {
     const db = getFirestore();
     const colRef = collection(db, this.key);
@@ -108,10 +122,14 @@ export class FireRepoService<T extends ID> {
     return ret;
   }
 
-  protected getListByQuery(queryConstraint : QueryConstraint) : Observable<T[]>{
+  protected getListByQuery(queryConstraint : QueryConstraint| QueryCompositeFilterConstraint) : Observable<T[]>{
     const db = getFirestore();
     const colRef = collection(db, this.key);
-    const queryRef = query(colRef, queryConstraint);
+    let queryRef : Query;
+    if (queryConstraint instanceof QueryConstraint)
+      queryRef = query(colRef, queryConstraint);
+    else
+      queryRef = query(colRef, queryConstraint as QueryCompositeFilterConstraint);
     const resRef = getDocs(queryRef);
     const ret = from(resRef).pipe(
       map(q => {

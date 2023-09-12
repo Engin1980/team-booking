@@ -3,7 +3,10 @@
 </div>
 <div *ngIf="team != undefined">
     <h2>Tým {{team.title}}</h2>
-
+    <div>ID: {{teamId}}</div>
+    <div>Is Admin: {{isLoggedUserAdmin}}</div>
     <h3>Členové</h3>
-    
+    <div *ngFor="let member of members">
+        <div>{{member.nick}} ({{member.email}})</div>
+    </div>
 </div>
