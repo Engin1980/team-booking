@@ -53,11 +53,9 @@ export class FireTeamService extends FireRepoService<Team> implements ITeamServi
   }
 
   public getAllMembers(team: ID): Observable<User> {
-    console.log("getting all members")
     const db = super.getDb();
     const ut_ = this.userTeamService.getAllByTeamId(team);
     const ret = ut_.pipe(
-      tap(m => console.log("got member " + JSON.stringify(m))),
       concatMap(q => this.userService.getById(ModelFactory.createId(q.userId)))
     );
     return ret;

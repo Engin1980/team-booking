@@ -50,8 +50,6 @@ export class FireRepoService<T extends ID> {
   }
 
   public getById(id: ID): Observable<T> {
-    console.log("getting " + this.key + " with id " + id.id);
-    const inKey = this.key + "/" + id;
     const db = getFirestore();
     const docRef = doc(db, this.key, id.id);
     const docDataRef = getDoc(docRef);

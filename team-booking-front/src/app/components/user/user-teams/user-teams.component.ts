@@ -33,10 +33,7 @@ export class TeamsUserComponent {
     // });
 
     const loggedUser = this.userService.getLoggedUser() ?? throwUnexpectedException("No logged user");
-    console.log("dud");
-    //    this.teamService.getListByUser(loggedUser).subscribe(q=> this.teams = q);
     this.teamService.getAllByUser(loggedUser).subscribe(q => this.teams.push(q));
-    console.log("dod");
 
   }
 

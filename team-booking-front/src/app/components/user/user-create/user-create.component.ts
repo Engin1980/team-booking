@@ -24,7 +24,6 @@ export class CreateUserComponent {
     private router: Router) { }
 
   onNgInit() {
-    console.log("initialized");
   }
 
   onSubmit(): void {

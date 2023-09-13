@@ -44,7 +44,6 @@ export class FireUserService extends FireRepoService<User> implements IUserServi
     const ret = this.fireAuthService.login(email, password)
       .pipe(
         concatMap(userCredential => this.getByEmail(userCredential.user.email ?? throwUnexpectedException())),
-        tap(u => console.log("logged-in as " + JSON.stringify(u))),
         tap(u => this.loggedUser = u)
       );
     return ret;
