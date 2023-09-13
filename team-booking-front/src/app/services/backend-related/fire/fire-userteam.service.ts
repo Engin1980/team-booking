@@ -31,7 +31,6 @@ export class FireUserTeamService extends FireRepoService<UserTeam> {
   }
 
   public getAllByTeamId(id: ID): Observable<UserTeam> {
-    console.log("getting all members for team " + id.id);
     const ret = super.getAllByQuery(where("teamId", "==", id.id));
     return ret;
   }
