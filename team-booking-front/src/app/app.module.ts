@@ -17,6 +17,8 @@ import { ITeamService } from './services/model-related/iteam.service';
 import { FireTeamService } from './services/backend-related/fire/fire-team.service';
 import { UserInfoComponent } from './components/user/user-info/user-info.component';
 import { TeamInfoComponent } from './components/team/team-info/team-info.component';
+import { FireEventService } from './services/backend-related/fire/fire-event.service';
+import { IEventService } from './services/model-related/ievent.service';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { TeamInfoComponent } from './components/team/team-info/team-info.compone
   ],
   providers: [
     { provide: IUserService, useClass: FireUserService },
-    { provide: ITeamService, useClass: FireTeamService }
+    { provide: ITeamService, useClass: FireTeamService },
+    { provide: IEventService, useClass: FireEventService },
   ],
   bootstrap: [AppComponent]
 })

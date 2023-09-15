@@ -5,58 +5,65 @@
     <h2>Tým {{team.title}}</h2>
     <div>ID: {{teamId}}</div>
     <div>Is Admin: {{isLoggedUserAdmin}}</div>
-    <h3>Členové</h3>
-    <div *ngFor="let member of members">
-        <div>{{member.nick}} ({{member.email}})</div>
+    <div>
+        <h3>Členové</h3>
+        <div *ngFor="let member of members">
+            <div>{{member.nick}} ({{member.email}})</div>
+        </div>
     </div>
-    <h3>Události</h3>
-    <div *ngFor="let event of events">
+    <div>
+        <h3>Události</h3>
+        <div *ngFor="let event of events">
+            <div>
+                <div>{{event.title}}</div>
+                <div>{{event.date}} - {{event.duration}}</div>
+            </div>
+        </div>
+        <h4>Vytvořit událost</h4>
+        <form [formGroup]="formEvent" (ngSubmit)="createEvent()">
+            <div class="form-group">
+                <label for="title">Název</label>
+                <input id="title" name="title" type="text" class="form-control" formControlName="title" />
+            </div>
+            <div class="form-group">
+                <label for="fromDate">Datum (první) události</label>
+                <input id="fromDate" name="fromDate" type="date" class="form-control" formControlName="fromDate" />
+            </div>
+            <div class="form-group">
+                <label for="fromTime">Čas začátku události</label>
+                <input id="fromTime" name="fromTime" type="time" class="form-control" formControlName="fromTime" />
+            </div>
+            <div class="form-group">
+                <label for="durationInMinutes">Délka události</label>
+                <input id="durationInMinutes" name="durationInMinutes" type="number" min="0" max="300"
+                    class="form-control" formControlName="durationInMinutes" />
+            </div>
+            <div class="ml-3">
+                <div class="form-group">
 
+                </div>
+                <div class="form-group">
+                    <label for="repeatToDate">
+                        <input type="checkbox" formControlName="repeat" (click)="formEventRepeatChanged()" />
+                        Opakovat do dne
+                    </label>
+                    <input id="repeatToDate" name="repeatToDate" type="date" class="form-control"
+                        formControlName="repeatToDate" />
+                </div>
+                <div class="form-group">
+                    <label for="repeatDayInterval">Délka události</label>
+                    <select id="repeatDayInterval" name="repeatDayInterval" class="form-control"
+                        formControlName="repeatDayInterval">
+                        <option value="d">Denně</option>
+                        <option value="w">Týdně</option>
+                        <option value="ww">Co dva týdny</option>
+                        <option value="m">Měsíčně</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary mt-3" [disabled]="!formEvent.valid">Vytvořit</button>
+            </div>
+        </form>
     </div>
-    <h4>Vytvořit událost</h4>
-    <form [formGroup]="formEvent" (ngSubmit)="createEvent()">
-        <div class="form-group">
-            <label for="title">Název</label>
-            <input id="title" name="title" type="text" class="form-control" formControlName="title" />
-        </div>
-        <div class="form-group">
-            <label for="fromDate">Datum (první) události</label>
-            <input id="fromDate" name="fromDate" type="date" class="form-control" formControlName="fromDate" />
-        </div>
-        <div class="form-group">
-            <label for="fromTime">Čas začátku události</label>
-            <input id="fromTime" name="fromTime" type="time" class="form-control" formControlName="fromTime" />
-        </div>
-        <div class="form-group">
-            <label for="durationInMinutes">Délka události</label>
-            <input id="durationInMinutes" name="durationInMinutes" type="number" min="0" max="300" class="form-control"
-                formControlName="durationInMinutes" />
-        </div>
-        <div class="ml-3">
-            <div class="form-group">
-
-            </div>
-            <div class="form-group">
-                <label for="repeatToDate">
-                    <input type="checkbox" formControlName="repeat" (click)="formEventRepeatChanged()" />
-                    Opakovat do dne
-                </label>
-                <input id="repeatToDate" name="repeatToDate" type="date" class="form-control"
-                    formControlName="repeatToDate"/>
-            </div>
-            <div class="form-group">
-                <label for="repeatDayInterval">Délka události</label>
-                <select id="repeatDayInterval" name="repeatDayInterval" class="form-control"
-                    formControlName="repeatDayInterval">
-                    <option value="d">Denně</option>
-                    <option value="w">Týdně</option>
-                    <option value="ww">Co dva týdny</option>
-                    <option value="m">Měsíčně</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary mt-3" [disabled]="!formEvent.valid">Vytvořit</button>
-        </div>
-    </form>
 </div>

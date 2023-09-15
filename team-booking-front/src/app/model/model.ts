@@ -22,6 +22,9 @@ export interface UserTeam extends ID {
 export interface Event extends ID {
     title: string;
     date: Date;
+    teamId : any,
+    duration : number,
+    groupId : any
 }
 
 export interface UserEvent extends ID {
@@ -32,8 +35,8 @@ export interface UserEvent extends ID {
 
 export interface Comment extends ID {
     text: string;
-    userId: number;
-    eventId: number;
+    userId: any;
+    eventId: any;
 }
 
 export class ModelFactory {
